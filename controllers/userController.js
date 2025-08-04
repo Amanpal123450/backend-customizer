@@ -742,4 +742,55 @@ exports.changePassword = async (req, res) => {
   }
 };
 
+exports.updateprofileUser = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const thumbnail = req.files?.thumbnail;
 
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (!thumbnail) {
+      return res.status(400).json({
+        success: false,
+        message: "Thumbnail is required",
+      });
+    }
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User does not exist",
+      });
+    }
+
+    // Upload thumbnail to Cloudinary
+    const image = await uploadToCloudinary(
+      thumbnail,
+      process.env.FOLDER_NAME,
+      1000,
+      1000
+    );
+
+    user.thumbnail = image.secure_url;
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      thumbnail: image.secure_url,
+    });
+  } catch (error) {
+    console.error("Update Profile Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error while updating profile",
+    });
+  }
+};

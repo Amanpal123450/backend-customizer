@@ -1,4 +1,4 @@
-const Newsletter = require("../models/Newsletter");
+const Newsletter = require("../models/NewsletterModel");
 
 // 👉 Public: User subscribes
 exports.subscribe = async (req, res) => {
