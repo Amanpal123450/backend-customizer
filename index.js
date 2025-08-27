@@ -44,8 +44,7 @@ const unitRoutes = require("./routers/UnitRotes");
 const taxRoutes = require("./routers/TaxesRoute");
 const brandRoutes = require("./routers/BrandRoutes");
 const ColorRoutes = require('./routers/ColorRoutes');
-const newsletter =require('./routers/newsletter')
-// Routes declaration
+const newsletter = require('./routers/newsletter');
 app.use("/api/v1", user); 
 app.use("/api/v1", product);
 app.use("/api/v1", order);
