@@ -43,6 +43,7 @@ const variationRoutes = require("./routers/VariationRoutes");
 const unitRoutes = require("./routers/UnitRotes");
 const taxRoutes = require("./routers/TaxesRoute");
 const brandRoutes = require("./routers/BrandRoutes");
+const newsletter = require("./routers/newsletter")
 // Routes declaration
 app.use("/api/v1", user); 
 app.use("/api/v1", product);
@@ -50,6 +51,7 @@ app.use("/api/v1", order);
 app.use("/api/v1", ShippingAddress);
 app.use("/api/v1", cart);  
 app.use("/api/v1", coupon);
+app.use("/api/v1", newsletter);
 app.use("/api/v1/payment", Payments); 
 app.use("/api/v1/admin", admin);
 app.use('/api/v1',DiscountRouter)

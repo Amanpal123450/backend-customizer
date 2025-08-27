@@ -19,7 +19,7 @@ const { isAdmin, isUser, auth } = require("../middleware/auth");
 
 router.post("/orders/add-order", createOrder);
 
-router.get("/orders/orderHistory", auth, fetchOrderHistory);
+// router.get("/orders/orderHistory", auth, fetchOrderHistory);
 
 router.get("/orders/all-orders", fetchOrders)
 
