@@ -18,7 +18,8 @@ const {
   LoginWithGoogle,
   lostPasswordController,
   updateprofile,
-  changePassword
+  changePassword,
+  updateprofileUser
 } = require("../controllers/userController");
 
 const { auth, isAdmin, isUser } = require("../middleware/auth");
@@ -46,6 +47,10 @@ router.get("/getAllAdmin", auth, isAdmin, getAllAdmins)
 router.get("/getAdminById/:id", auth, isAdmin, getAdminById)
 
 router.put("/updateprofile/:id",auth ,isAdmin,updateprofile)
+
+// Add to userRoutes.js
+router.put("/updateThumbnail", auth, isUser, updateprofileUser);
+
 
  router.put("/updateDetails", auth, updateUser);
 
