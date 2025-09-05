@@ -81,7 +81,7 @@ exports.fetchAllSubCategoryOfCategory = async (req, res) => {
 
     const categoryDetails = await Category.findById({
       _id: categoryId,
-    }).populate("subCategory");
+    })
 
     if (!categoryDetails) {
       return res.status(404).json({
