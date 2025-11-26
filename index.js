@@ -14,10 +14,17 @@ const { cloudinaryConnect } = require("./config/cloudinary");
 dbConnect();
 
 // Middleware
-app.use(cors({
-  origin: "https://customizer-admin.vercel.app","https://customizer-frontend-4llj.vercel.app",  
-  credentials: true,              
-}));
+app.use(
+  cors({
+    origin: [
+      "https://customizer-admin.vercel.app",
+      "https://customizer-frontend-4llj.vercel.app",
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  })
+);
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
