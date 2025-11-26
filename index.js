@@ -19,6 +19,7 @@ app.use(
     origin: [
       "https://customizer-admin.vercel.app",
       "https://customizer-frontend-4llj.vercel.app",
+      "https://customizer-main-admin.vercel.app",
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
