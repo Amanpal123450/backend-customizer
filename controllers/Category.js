@@ -1,7 +1,7 @@
 const Category = require("../models/productCategory");
 const SubCategory = require("../models/productSubCategory");
 const Product = require("../models/productModel");
-
+const mongoose = require("mongoose");
 const { uploadToCloudinary } = require("../utils/imageUploader");
 
 
@@ -256,54 +256,59 @@ exports.fetchCategoryPageDetail = async(req , res)=>{
 // };
 
 
-exports.getProductsByCategoryId = async(req ,res)=> {
+exports.getProductsByCategoryId = async (req, res) => {
   try {
-    // Find the category with the provided ID
-    const {categoryId} = req.params;
+    const { categoryId } = req.params;
 
-    const categoryDetail = await Category.findById({_id:categoryId});
+    // Validate categoryId
+    if (!categoryId || categoryId === "null" || !mongoose.Types.ObjectId.isValid(categoryId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or missing category ID",
+      });
+    }
 
+    // Find the category
+    const categoryDetail = await Category.findById(categoryId);
 
     if (!categoryDetail) {
       console.log("Category not found");
-      return res.status(403).json({
-        success:false ,
-        messagge:"Catgoey do not found with this id"
-      })
+      return res.status(404).json({
+        success: false,
+        message: "Category not found with this ID",
+      });
     }
 
-    // Find the subcategories associated with the category
+    // Find subcategories
     const subcategories = await SubCategory.find({
-      _id: { $in: categoryDetail.subCategory }
+      _id: { $in: categoryDetail.subCategory },
     }).exec();
- 
-    console.log("subcate",subcategories);
 
-    // Extract product IDs from the subcategories
-    const productIds = subcategories.flatMap(subcategory => subcategory.products);
+    console.log("subcategories:", subcategories);
 
-    console.log("products",productIds);
-    
-    // Find all products based on the extracted IDs
+    // Extract product IDs
+    const productIds = subcategories.flatMap((sub) => sub.products);
+
+    console.log("productIds:", productIds);
+
+    // Find products
     const products = await Product.find({
-      _id: { $in: productIds }
+      _id: { $in: productIds },
     }).exec();
-    
-    console.log("products2",products);
-    
+
+    console.log("products:", products);
 
     return res.status(200).json({
-      success:true ,
-      message:" Successfuly  fetch",
-      products:products,
+      success: true,
+      message: "Successfully fetched",
+      products,
       category: categoryDetail,
-    })
-
+    });
   } catch (error) {
     console.error("Error retrieving products by category ID:", error);
-    res.status(500).json({
-      success:false ,
-      message:"internal server error"
-    })
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
   }
-}  
+}; 
