@@ -15,7 +15,7 @@ dbConnect();
 
 // Middleware
 app.use(cors({
-  origin: "*",
+  origin: "https://customizer-admin.vercel.app","https://customizer-frontend-4llj.vercel.app",  
   credentials: true,              
 }));
 app.use(express.urlencoded({ extended: false }));
