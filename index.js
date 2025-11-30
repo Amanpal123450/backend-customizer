@@ -20,6 +20,7 @@ app.use(
       "https://customizer-admin.vercel.app",
       "https://customizer-frontend-4llj.vercel.app",
       "https://customizer-main-admin.vercel.app",
+      "http://localhost:3000"
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
