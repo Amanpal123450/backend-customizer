@@ -205,7 +205,7 @@ exports.deleteOrder = async (req, res) => {
 
 exports.fetchOrderHistory = async (req, res) => {
   try {
-    console.log("Fetching order history for user...");
+    
     const userId = req.user?.id;
     console.log("User ID:", userId);
 
@@ -216,7 +216,7 @@ exports.fetchOrderHistory = async (req, res) => {
       });
     }
 
-const orderHistory = await Order.find({ userId })
+ const orderHistory = await Order.find({ userId })
   .populate("products.productId") // ✅ instead of just .populate("products")
   .sort({ createdAt: -1 });
 

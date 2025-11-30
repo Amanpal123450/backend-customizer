@@ -173,8 +173,10 @@ exports.verifyPayment = async (req, res) => {
       landmark: shippingAddressDoc.landmark || "N/A",
       country: shippingAddressDoc.country,
     };
+     const orderId = "ORD-" + Date.now() + "-" + Math.floor(Math.random()*9999);
 
     const order = new Order({
+      orderId,
       userId,
       totalAmount: amount,
       products: orderItems,
@@ -186,49 +188,49 @@ exports.verifyPayment = async (req, res) => {
     await order.save();
 
        const populatedOrderItems = await Promise.all(
-      orderItems.map(async (item) => {
-        const product = await Product.findById(item.productId);
-        return {
-          name: product?.title || "Unknown Product",
-          quantity: item.quantity,
-        };
-      })
-    );
+    //   orderItems.map(async (item) => {
+    //     const product = await Product.findById(item.productId);
+    //     return {
+    //       name: product?.title || "Unknown Product",
+    //       quantity: item.quantity,
+    //     };
+    //   })
+    // );
 
-    const user = await User.findById(userId);
+    // const user = await User.findById(userId);
 
     // Email transporter
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
+    // const transporter = nodemailer.createTransport({
+    //   service: "gmail",
+    //   auth: {
+    //     user: process.env.EMAIL_USER,
+    //     pass: process.env.EMAIL_PASS,
+    //   },
+    // });
 
-    const emailContent = `
-      <h2>Hi ${user.firstName} ${user.lastName},</h2>
-      <p>Thank you for your purchase! Your payment of ₹${amount} has been received successfully.</p>
-      <p>We are processing your order and will notify you once it is shipped.</p>
-      <h3>Order Details:</h3>
-      <ul>
-        ${populatedOrderItems
-          .map(
-            (item) =>
-              `<li>Product ID: ${item.name} - Quantity: ${item.quantity}</li>`
-          )
-          .join("")}
-      </ul>
-      <p><b>Shipping Address:</b> ${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.state}, ${shippingAddress.pincode}</p>
-      <p>Thank you for shopping with us!</p>
-    `;
+    // const emailContent = `
+    //   <h2>Hi ${user.firstName} ${user.lastName},</h2>
+    //   <p>Thank you for your purchase! Your payment of ₹${amount} has been received successfully.</p>
+    //   <p>We are processing your order and will notify you once it is shipped.</p>
+    //   <h3>Order Details:</h3>
+    //   <ul>
+    //     ${populatedOrderItems
+    //       .map(
+    //         (item) =>
+    //           `<li>Product ID: ${item.name} - Quantity: ${item.quantity}</li>`
+    //       )
+    //       .join("")}
+    //   </ul>
+    //   <p><b>Shipping Address:</b> ${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.state}, ${shippingAddress.pincode}</p>
+    //   <p>Thank you for shopping with us!</p>
+    // `;
 
-    await transporter.sendMail({
-      from:"amanpal6000@gmail.com",
-      to: user.email,
-      subject: "Order Confirmation - Customizer",
-      html: emailContent,
-    });
+    // await transporter.sendMail({
+    //   from:"amanpal6000@gmail.com",
+    //   to: user.email,
+    //   subject: "Order Confirmation - Customizer",
+    //   html: emailContent,
+    // });
 
     return res.status(200).json({
       success: true,
