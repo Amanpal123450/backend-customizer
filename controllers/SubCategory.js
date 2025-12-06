@@ -79,30 +79,30 @@ exports.fetchAllSubCategoryOfCategory = async (req, res) => {
       });
     }
 
-    const categoryDetails = await Category.findById({
-      _id: categoryId,
-    })
+    const categoryDetails = await Category.findById(categoryId)
+      .populate("subCategory");   // 👉 IMPORTANT
 
     if (!categoryDetails) {
       return res.status(404).json({
         success: false,
-        message: "Cannot find the category with this id ",
+        message: "Cannot find the category with this id",
       });
     }
 
     return res.status(200).json({
       success: true,
-      message: "Successfuly fetch the subCategory",
+      message: "Successfully fetched the subCategory",
       categoryDetails,
     });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "Internal server error ",
+      message: "Internal server error",
     });
   }
 };
+
 
 
 // !sub category page details ->

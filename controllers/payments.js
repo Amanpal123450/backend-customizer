@@ -296,45 +296,45 @@ exports.placeCodOrder = async (req, res) => {
     if (!user) return res.status(404).json({ success: false, message: "User not found" });
 
     // 🔴 FETCH PRODUCT DETAILS
-    const populatedProducts = await Promise.all(
-      formattedProducts.map(async (item) => {
-        const product = await Product.findById(item.productId);
-        return {
-          name: product?.title || "Product Name",
-          quantity: item.quantity,
-        };
-      })
-    );
+    // const populatedProducts = await Promise.all(
+    //   formattedProducts.map(async (item) => {
+    //     const product = await Product.findById(item.productId);
+    //     return {
+    //       name: product?.title || "Product Name",
+    //       quantity: item.quantity,
+    //     };
+    //   })
+    // );
 
-    // 🔴 SEND EMAIL
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
+    // // 🔴 SEND EMAIL
+    // const transporter = nodemailer.createTransport({
+    //   service: "gmail",
+    //   auth: {
+    //     user: process.env.EMAIL_USER,
+    //     pass: process.env.EMAIL_PASS,
+    //   },
+    // });
 
-    const mailOptions = {
-      from:process.env.EMAIL_USER,
-      to: user.email,
-      subject: "Order Confirmation - Cash on Delivery",
-      html: `
-        <h2>Thank you for your order!</h2>
-        <p>Your order ID is <strong>${newOrder._id}</strong>.</p>
-        <h3>Products:</h3>
-        <ul>
-          ${populatedProducts.map(p => `<li>${p.name} - Quantity: ${p.quantity}</li>`).join("")}
-        </ul>
-        <p><strong>Total:</strong> ₹${amount}</p>
-        <p><strong>Payment Method:</strong> Cash on Delivery</p>
-        <p>We will deliver your order to the following address:</p>
-        <p>${shippingAddress.fullName}, ${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.state} - ${shippingAddress.pincode}, ${shippingAddress.country}</p>
-        <p>Phone: ${shippingAddress.phone}</p>
-        <br/>
-        <p>Thanks for shopping with us!</p>
-      `,
-    };
+    // const mailOptions = {
+    //   from:process.env.EMAIL_USER,
+    //   to: user.email,
+    //   subject: "Order Confirmation - Cash on Delivery",
+    //   html: `
+    //     <h2>Thank you for your order!</h2>
+    //     <p>Your order ID is <strong>${newOrder._id}</strong>.</p>
+    //     <h3>Products:</h3>
+    //     <ul>
+    //       ${populatedProducts.map(p => `<li>${p.name} - Quantity: ${p.quantity}</li>`).join("")}
+    //     </ul>
+    //     <p><strong>Total:</strong> ₹${amount}</p>
+    //     <p><strong>Payment Method:</strong> Cash on Delivery</p>
+    //     <p>We will deliver your order to the following address:</p>
+    //     <p>${shippingAddress.fullName}, ${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.state} - ${shippingAddress.pincode}, ${shippingAddress.country}</p>
+    //     <p>Phone: ${shippingAddress.phone}</p>
+    //     <br/>
+    //     <p>Thanks for shopping with us!</p>
+    //   `,
+    // };
 
     await transporter.sendMail(mailOptions);
 

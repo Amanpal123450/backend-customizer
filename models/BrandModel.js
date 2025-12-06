@@ -12,9 +12,10 @@ const brandSchema = new mongoose.Schema({
         required: true
     },
     active: {
-        type: Boolean,
-        default: true
-    },
+  type: Boolean,
+  default: true,
+},
+
     seo: {
         metaTitle: {
             type: String,

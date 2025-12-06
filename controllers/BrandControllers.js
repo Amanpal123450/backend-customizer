@@ -4,40 +4,41 @@ const { uploadToCloudinary } = require("../utils/imageUploader");
 const Brand = require("../models/BrandModel");
 // Create Brand
 exports.createBrand = async (req, res) => {
-    try {
-        const { name, metaTitle, metaDescription, keywords } = req.body;
+  try {
+    const { name, metaTitle, metaDescription, keywords } = req.body;
 
-        const thumbnail = req.files.thumbnail;
-
-        if (!name || !metaTitle || !metaDescription || !keywords || !thumbnail) {
-            return res.status(400).json({ message: "All fields are required" });
-        }
-
-        // Upload image to Cloudinary
-        const image = await uploadToCloudinary(
-            thumbnail,
-            process.env.FOLDER_NAME,
-            1000,
-            1000
-        ); 
-
-
-        const newBrand = new Brand({
-            name,
-            logoUrl: image.secure_url,
-            seo: {
-                metaTitle,
-                metaDescription,
-                keywords: keywords?.split(",") || [],
-            },
-        });
-
-        const savedBrand = await newBrand.save();
-        res.status(201).json(savedBrand);
-    } catch (error) {
-        res.status(500).json({ message: "Failed to create brand", error });
+    const logoUrl = req.files?.logoUrl;
+    if (!name || !logoUrl) {
+      return res.status(400).json({ message: "Name and logo are required" });
     }
+
+    // Upload image
+    const image = await uploadToCloudinary(
+      logoUrl,
+      process.env.FOLDER_NAME,
+      1000,
+      1000
+    );
+
+  const newBrand = new Brand({
+  name,
+  logoUrl: image.secure_url,
+  active: true,
+  seo: {
+    metaTitle: metaTitle || "",
+    metaDescription: metaDescription || "",
+    keywords: keywords ? keywords.split(",") : [],
+  },
+});
+
+
+    const savedBrand = await newBrand.save();
+    res.status(201).json(savedBrand);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to create brand", error });
+  }
 };
+
 
 // Get All Brands
 exports.getAllBrands = async (req, res) => {
